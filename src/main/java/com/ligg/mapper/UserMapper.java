@@ -1,4 +1,4 @@
-package com.ligg.dao;
+package com.ligg.mapper;
 
 import com.ligg.entity.User;
 import org.apache.ibatis.annotations.Mapper;
@@ -9,7 +9,7 @@ import java.util.List;
  * 用户数据访问对象
  */
 @Mapper
-public interface UserDao {
+public interface UserMapper {
     
     /**
      * 通过ID查询用户

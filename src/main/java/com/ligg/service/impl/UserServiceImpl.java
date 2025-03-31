@@ -1,6 +1,6 @@
 package com.ligg.service.impl;
 
-import com.ligg.dao.UserDao;
+import com.ligg.mapper.UserMapper;
 import com.ligg.entity.User;
 import com.ligg.service.UserService;
 import com.ligg.util.PasswordEncoder;
@@ -18,7 +18,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserDao userDao;
+    private UserMapper userDao;
 
     @Override
     public User getUserById(Long id) {

@@ -5,11 +5,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,11 +23,20 @@ import javax.crypto.SecretKey;
 @Slf4j
 public class JwtTokenUtil {
 
-    // 使用安全的HS512密钥
-    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    private SecretKey key;
+    
+    @Value("${jwt.secret}")
+    private String secret;
 
     @Value("${jwt.expiration}")
     private Long expiration;
+    
+    @PostConstruct
+    public void init() {
+        // 使用配置的密钥初始化
+        byte[] keyBytes = secret.getBytes();
+        key = Keys.hmacShaKeyFor(keyBytes);
+    }
 
     /**
      * 从令牌中获取用户名

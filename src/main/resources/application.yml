@@ -19,12 +19,19 @@ spring:
       timeout: 10000
       # 如果需要密码，取消注释下一行
       # password: 
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
 
+# MyBatis配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.ligg.entity
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # JWT配置
 jwt:
@@ -34,3 +41,17 @@ jwt:
   header: Authorization
   # token前缀
   tokenPrefix: "Bearer "
+  # JWT密钥
+  secret: "your-256-bit-secret-key-for-jwt-token-signature-validation-12345"
+
+# 视频存储配置
+video:
+  # 视频上传路径
+  upload:
+    path: D:/Exploitation/JavaWeb/PlayVideo/upload/videos
+  # 封面上传路径
+  cover:
+    path: D:/Exploitation/JavaWeb/PlayVideo/upload/covers
+  # 视频访问URL前缀
+  access:
+    url: http://localhost:8080/videos

@@ -1,4 +1,4 @@
-package com.ligg.controller;
+package com.ligg.controller.user;
 
 import com.ligg.entity.User;
 import com.ligg.service.UserService;
