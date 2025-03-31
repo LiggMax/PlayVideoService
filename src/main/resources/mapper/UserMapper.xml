@@ -43,14 +43,6 @@
         FROM user
     </select>
 
-    <!-- 用户登录验证 -->
-    <select id="login" resultMap="BaseResultMap">
-        SELECT 
-        <include refid="Base_Column_List" />
-        FROM user
-        WHERE username = #{username} AND password = #{password}
-    </select>
-
     <!-- 插入用户 -->
     <insert id="insert" parameterType="com.ligg.entity.User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO user

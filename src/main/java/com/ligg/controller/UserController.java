@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 用户控制器
+ * 用户控制器，处理用户信息相关操作
  */
 @RestController
 @RequestMapping("/api/user")
@@ -23,64 +23,27 @@ public class UserController {
     private UserService userService;
 
     /**
-     * 用户登录
-     * @param loginInfo 登录信息
-     * @return 登录结果
+     * 获取当前登录用户信息
+     * @param request 请求对象
+     * @return 用户信息
      */
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginInfo) {
-        String username = loginInfo.get("username");
-        String password = loginInfo.get("password");
-        
-        log.info("用户登录: {}", username);
-        
-        User user = userService.login(username, password);
+    @GetMapping("/current")
+    public ResponseEntity<Map<String, Object>> getCurrentUser(jakarta.servlet.http.HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
         
+        // 从请求属性中获取用户信息（由JWT拦截器设置）
+        User user = (User) request.getAttribute("user");
         if (user != null) {
-            // 登录成功，返回用户信息（密码置空）
+            // 不返回密码
             user.setPassword(null);
             result.put("success", true);
-            result.put("message", "登录成功");
             result.put("user", user);
             return ResponseEntity.ok(result);
         } else {
-            // 登录失败
             result.put("success", false);
-            result.put("message", "用户名或密码错误");
+            result.put("message", "未获取到用户信息");
             return ResponseEntity.ok(result);
         }
-    }
-
-    /**
-     * 用户注册
-     * @param user 用户信息
-     * @return 注册结果
-     */
-    @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> register(@RequestBody User user) {
-        log.info("用户注册: {}", user.getUsername());
-        
-        Map<String, Object> result = new HashMap<>();
-        
-        // 检查用户名是否已存在
-        if (userService.getUserByUsername(user.getUsername()) != null) {
-            result.put("success", false);
-            result.put("message", "用户名已存在");
-            return ResponseEntity.ok(result);
-        }
-        
-        boolean success = userService.register(user);
-        
-        if (success) {
-            result.put("success", true);
-            result.put("message", "注册成功");
-        } else {
-            result.put("success", false);
-            result.put("message", "注册失败");
-        }
-        
-        return ResponseEntity.ok(result);
     }
 
     /**

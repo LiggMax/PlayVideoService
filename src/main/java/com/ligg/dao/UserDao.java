@@ -2,7 +2,6 @@ package com.ligg.dao;
 
 import com.ligg.entity.User;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -52,12 +51,4 @@ public interface UserDao {
      * @return 用户列表
      */
     List<User> findAll();
-    
-    /**
-     * 验证用户登录
-     * @param username 用户名
-     * @param password 密码
-     * @return 用户对象
-     */
-    User login(@Param("username") String username, @Param("password") String password);
 } 

@@ -3,6 +3,7 @@ package com.ligg.service.impl;
 import com.ligg.dao.UserDao;
 import com.ligg.entity.User;
 import com.ligg.service.UserService;
+import com.ligg.util.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,16 +43,23 @@ public class UserServiceImpl implements UserService {
         user.setCreateTime(now);
         user.setUpdateTime(now);
         
-        // 进行密码加密（实际应用中应使用加密算法）
-        // TODO: 密码加密
+        // 密码加密
+        user.setPassword(PasswordEncoder.encode(user.getPassword()));
         
         return userDao.insert(user) > 0;
     }
 
     @Override
     public User login(String username, String password) {
-        // TODO: 密码应该在比较前进行加密
-        return userDao.login(username, password);
+        // 获取用户信息
+        User user = userDao.findByUsername(username);
+        
+        // 如果用户存在且密码匹配，则返回用户信息
+        if (user != null && PasswordEncoder.matches(password, user.getPassword())) {
+            return user;
+        }
+        
+        return null;
     }
 
     @Override
@@ -59,6 +67,12 @@ public class UserServiceImpl implements UserService {
     public boolean updateUser(User user) {
         // 更新时间
         user.setUpdateTime(new Date());
+        
+        // 如果修改了密码，进行加密
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            user.setPassword(PasswordEncoder.encode(user.getPassword()));
+        }
+        
         return userDao.update(user) > 0;
     }
 
