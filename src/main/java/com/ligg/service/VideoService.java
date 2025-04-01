@@ -22,75 +22,96 @@ public interface VideoService {
      * @param id 视频ID
      * @return 视频对象
      */
-    Video findById(Long id);
+    Video getVideoById(Long id);
     
     /**
      * 根据用户ID查询视频列表
      * @param userId 用户ID
-     * @param page 页码
-     * @param size 每页数量
+     * @param offset 偏移量
+     * @param limit 限制数量
      * @return 视频列表
      */
-    List<Video> findByUserId(Long userId, int page, int size);
+    List<Video> getVideosByUserId(Long userId, int offset, int limit);
     
     /**
      * 统计用户上传的视频数量
      * @param userId 用户ID
      * @return 视频数量
      */
-    int countByUserId(Long userId);
+    int countVideosByUserId(Long userId);
     
     /**
      * 删除视频
      * @param id 视频ID
+     * @return 是否成功
      */
-    void deleteVideo(Long id);
+    boolean deleteVideo(Long id);
     
     /**
-     * 更新视频浏览量
+     * 增加视频播放次数
      * @param id 视频ID
-     * @return 更新后的视频对象
+     * @return 是否成功
      */
-    Video incrementViews(Long id);
+    boolean incrementViews(Long id);
     
     /**
-     * 更新视频点赞量
+     * 增加视频点赞数
      * @param id 视频ID
-     * @return 更新后的视频对象
+     * @return 是否成功
      */
-    Video incrementLikes(Long id);
+    boolean incrementLikes(Long id);
     
     /**
      * 根据分类查询视频
      * @param category 分类
-     * @param page 页码
-     * @param size 每页数量
-     * @return 视频分页结果
+     * @param offset 偏移量
+     * @param limit 限制数量
+     * @return 视频列表
      */
-    Page<Video> findByCategory(String category, int page, int size);
+    List<Video> getVideosByCategory(String category, int offset, int limit);
     
     /**
      * 获取最新视频
-     * @param page 页码
-     * @param size 每页数量
-     * @return 视频分页结果
+     * @param offset 偏移量
+     * @param limit 限制数量
+     * @return 视频列表
      */
-    Page<Video> findLatestVideos(int page, int size);
+    List<Video> getLatestVideos(int offset, int limit);
     
     /**
      * 获取热门视频
-     * @param page 页码
-     * @param size 每页数量
-     * @return 视频分页结果
+     * @param offset 偏移量
+     * @param limit 限制数量
+     * @return 视频列表
      */
-    Page<Video> findPopularVideos(int page, int size);
+    List<Video> getPopularVideos(int offset, int limit);
     
     /**
      * 搜索视频
      * @param keyword 关键词
-     * @param page 页码
-     * @param size 每页数量
-     * @return 视频分页结果
+     * @param offset 偏移量
+     * @param limit 限制数量
+     * @return 视频列表
      */
-    Page<Video> searchVideos(String keyword, int page, int size);
+    List<Video> searchVideos(String keyword, int offset, int limit);
+    
+    /**
+     * 统计视频总数
+     * @return 视频总数
+     */
+    int countVideos();
+    
+    /**
+     * 统计分类下的视频数量
+     * @param category 分类
+     * @return 视频数量
+     */
+    int countVideosByCategory(String category);
+    
+    /**
+     * 统计搜索结果数量
+     * @param keyword 关键词
+     * @return 视频数量
+     */
+    int countSearchResults(String keyword);
 } 

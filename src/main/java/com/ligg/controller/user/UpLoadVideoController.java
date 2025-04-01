@@ -187,9 +187,9 @@ public class UpLoadVideoController {
         User user = (User) request.getAttribute("user");
         
         // 查询视频列表
-        List<Video> videos = videoService.findByUserId(user.getId(), page, size);
+        List<Video> videos = videoService.getVideosByUserId(user.getId(), page, size);
         // 查询总数
-        int total = videoService.countByUserId(user.getId());
+        int total = videoService.countVideosByUserId(user.getId());
         
         Map<String, Object> result = new HashMap<>();
         result.put("videos", videos);
@@ -210,7 +210,7 @@ public class UpLoadVideoController {
         User user = (User) request.getAttribute("user");
         
         // 查询视频是否存在且属于当前用户
-        Video video = videoService.findById(id);
+        Video video = videoService.getVideoById(id);
         if (video == null) {
             return ResponseResult.error("视频不存在");
         }

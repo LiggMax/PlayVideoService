@@ -56,8 +56,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        // 获取token（不再检查前缀）
-        String token = requestHeader.startsWith(tokenPrefix) ? 
+        String token = requestHeader.startsWith(tokenPrefix) ?
             requestHeader.substring(tokenPrefix.length()) : requestHeader;
         log.info("解析出的token: {}", token);
         

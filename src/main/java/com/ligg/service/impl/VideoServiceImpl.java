@@ -4,9 +4,6 @@ import com.ligg.entity.Video;
 import com.ligg.mapper.VideoMapper;
 import com.ligg.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +17,7 @@ import java.util.List;
 public class VideoServiceImpl implements VideoService {
     
     @Autowired
-    private VideoMapper videoRepository;
+    private VideoMapper videoMapper;
     
     @Override
     @Transactional
@@ -31,82 +28,82 @@ public class VideoServiceImpl implements VideoService {
             // 更新时间
             video.setUpdateTime(LocalDateTime.now());
             // 执行插入
-            videoRepository.insert(video);
+            videoMapper.insert(video);
         } else {
             // 更新时间
             video.setUpdateTime(LocalDateTime.now());
             // 执行更新
-            videoRepository.update(video);
+            videoMapper.update(video);
         }
         
         return video;
     }
     
     @Override
-    public Video findById(Long id) {
-        return videoRepository.selectById(id);
+    public Video getVideoById(Long id) {
+        return videoMapper.selectById(id);
     }
     
     @Override
-    public List<Video> findByUserId(Long userId, int page, int size) {
-        int offset = (page - 1) * size;
-        return videoRepository.selectByUserId(userId, offset, size);
+    public List<Video> getVideosByUserId(Long userId, int offset, int limit) {
+        return videoMapper.selectByUserId(userId, offset, limit);
     }
     
     @Override
-    public int countByUserId(Long userId) {
-        return videoRepository.countByUserId(userId);
-    }
-    
-    @Override
-    @Transactional
-    public void deleteVideo(Long id) {
-        videoRepository.deleteById(id);
+    public int countVideosByUserId(Long userId) {
+        return videoMapper.countByUserId(userId);
     }
     
     @Override
     @Transactional
-    public Video incrementViews(Long id) {
-        videoRepository.incrementViews(id);
-        return videoRepository.selectById(id);
+    public boolean deleteVideo(Long id) {
+        return videoMapper.deleteById(id) > 0;
     }
     
     @Override
     @Transactional
-    public Video incrementLikes(Long id) {
-        videoRepository.incrementLikes(id);
-        return videoRepository.selectById(id);
+    public boolean incrementViews(Long id) {
+        return videoMapper.incrementViews(id) > 0;
     }
     
     @Override
-    public Page<Video> findByCategory(String category, int page, int size) {
-        int offset = (page - 1) * size;
-        List<Video> videos = videoRepository.selectByCategory(category, 1, offset, size);
-        int total = videoRepository.countByCategory(category, 1);
-        return new PageImpl<>(videos, PageRequest.of(page - 1, size), total);
+    @Transactional
+    public boolean incrementLikes(Long id) {
+        return videoMapper.incrementLikes(id) > 0;
     }
     
     @Override
-    public Page<Video> findLatestVideos(int page, int size) {
-        int offset = (page - 1) * size;
-        List<Video> videos = videoRepository.selectLatestVideos(1, offset, size);
-        int total = videoRepository.countByStatus(1);
-        return new PageImpl<>(videos, PageRequest.of(page - 1, size), total);
+    public List<Video> getVideosByCategory(String category, int offset, int limit) {
+        return videoMapper.selectByCategory(category, 1, offset, limit);
     }
     
     @Override
-    public Page<Video> findPopularVideos(int page, int size) {
-        int offset = (page - 1) * size;
-        List<Video> videos = videoRepository.selectPopularVideos(1, offset, size);
-        int total = videoRepository.countByStatus(1);
-        return new PageImpl<>(videos, PageRequest.of(page - 1, size), total);
+    public List<Video> getLatestVideos(int offset, int limit) {
+        return videoMapper.selectLatestVideos(1, offset, limit);
     }
     
     @Override
-    public Page<Video> searchVideos(String keyword, int page, int size) {
-        int offset = (page - 1) * size;
-        List<Video> videos = videoRepository.searchByKeyword(keyword, 1, offset, size);
-        int total = videoRepository.countSearchResult(keyword, 1);
-        return new PageImpl<>(videos, PageRequest.of(page - 1, size), total);
+    public List<Video> getPopularVideos(int offset, int limit) {
+        return videoMapper.selectPopularVideos(1, offset, limit);
+    }
+    
+    @Override
+    public List<Video> searchVideos(String keyword, int offset, int limit) {
+        return videoMapper.searchByKeyword(keyword, 1, offset, limit);
+    }
+    
+    @Override
+    public int countVideos() {
+        return videoMapper.countByStatus(1);
+    }
+    
+    @Override
+    public int countVideosByCategory(String category) {
+        return videoMapper.countByCategory(category, 1);
+    }
+    
+    @Override
+    public int countSearchResults(String keyword) {
+        return videoMapper.countSearchResult(keyword, 1);
     }
 } 
