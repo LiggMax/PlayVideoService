@@ -69,4 +69,32 @@
     <delete id="deleteById" parameterType="java.lang.Long">
         DELETE FROM user WHERE id = #{id}
     </delete>
+
+    <!-- 增加用户关注数 -->
+    <update id="incrementSubscriptionCount">
+        UPDATE user
+        SET subscription_count = subscription_count + 1
+        WHERE id = #{userId}
+    </update>
+    
+    <!-- 减少用户关注数 -->
+    <update id="decrementSubscriptionCount">
+        UPDATE user
+        SET subscription_count = GREATEST(subscription_count - 1, 0)
+        WHERE id = #{userId}
+    </update>
+    
+    <!-- 增加用户粉丝数 -->
+    <update id="incrementSubscriberCount">
+        UPDATE user
+        SET subscriber_count = subscriber_count + 1
+        WHERE id = #{userId}
+    </update>
+    
+    <!-- 减少用户粉丝数 -->
+    <update id="decrementSubscriberCount">
+        UPDATE user
+        SET subscriber_count = GREATEST(subscriber_count - 1, 0)
+        WHERE id = #{userId}
+    </update>
 </mapper> 

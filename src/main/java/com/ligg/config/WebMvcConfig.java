@@ -31,7 +31,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 注册JWT拦截器，只拦截/api/user/**路径下的接口，但排除OPTIONS请求
+        // 注册JWT拦截器，只拦截/api/user/**路径下的接口，但排除OPTIONS请求和一些特定接口
         registry.addInterceptor(jwtAuthenticationInterceptor)
                 .addPathPatterns("/api/user/**")  // 只拦截用户相关API
                 .excludePathPatterns("/api/account/**")  // 不拦截账户相关API

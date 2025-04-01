@@ -51,4 +51,32 @@ public interface UserMapper {
      * @return 用户列表
      */
     List<User> findAll();
+
+    /**
+     * 增加用户关注数
+     * @param userId 用户ID
+     * @return 影响的行数
+     */
+    int incrementSubscriptionCount(Long userId);
+
+    /**
+     * 减少用户关注数
+     * @param userId 用户ID
+     * @return 影响的行数
+     */
+    int decrementSubscriptionCount(Long userId);
+
+    /**
+     * 增加用户粉丝数
+     * @param userId 用户ID
+     * @return 影响的行数
+     */
+    int incrementSubscriberCount(Long userId);
+
+    /**
+     * 减少用户粉丝数
+     * @param userId 用户ID
+     * @return 影响的行数
+     */
+    int decrementSubscriberCount(Long userId);
 } 
