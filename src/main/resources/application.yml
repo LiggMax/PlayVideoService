@@ -55,3 +55,7 @@ video:
   # 视频访问URL前缀
   access:
     url: http://localhost:8080/videos
+
+# 动态内容上传路径
+upload:
+  path: D:/Exploitation/JavaWeb/PlayVideo/upload/images

@@ -121,12 +121,12 @@ public class VideoController {
      * @return 视频详情
      */
     @GetMapping("/{id}")
-    public ResponseResult<Video> getVideoDetail(@PathVariable Long id) {
-        Video video = videoService.getVideoById(id);
-        if (video == null) {
+    public ResponseResult <HashMap<String, Object>> getVideoDetail(@PathVariable Long id) {
+        HashMap<String, Object> videoInfo = videoService.getVideoById(id);
+        if (videoInfo == null) {
             return ResponseResult.error("视频不存在");
         }
-        return ResponseResult.success(video);
+        return ResponseResult.success(videoInfo);
     }
     
     /**

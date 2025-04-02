@@ -1,6 +1,8 @@
 package com.ligg.service.impl;
 
+import com.ligg.entity.User;
 import com.ligg.entity.Video;
+import com.ligg.mapper.UserMapper;
 import com.ligg.mapper.VideoMapper;
 import com.ligg.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,7 +21,9 @@ public class VideoServiceImpl implements VideoService {
     
     @Autowired
     private VideoMapper videoMapper;
-    
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     @Transactional
     public Video saveVideo(Video video) {
@@ -40,8 +45,14 @@ public class VideoServiceImpl implements VideoService {
     }
     
     @Override
-    public Video getVideoById(Long id) {
-        return videoMapper.selectById(id);
+    public HashMap<String, Object> getVideoById(Long id) {
+        HashMap<String, Object> videoInfoMap = new HashMap<>();
+        Video video = videoMapper.selectById(id);
+        videoInfoMap.put("video", video);
+
+        User userInfo = userMapper.findById(video.getUserId());
+        videoInfoMap.put("userInfo", userInfo);
+        return videoInfoMap;
     }
     
     @Override

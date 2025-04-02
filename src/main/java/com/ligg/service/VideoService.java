@@ -1,8 +1,8 @@
 package com.ligg.service;
 
 import com.ligg.entity.Video;
-import org.springframework.data.domain.Page;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,10 +19,11 @@ public interface VideoService {
     
     /**
      * 根据ID查询视频
+     *
      * @param id 视频ID
      * @return 视频对象
      */
-    Video getVideoById(Long id);
+    HashMap<String, Object> getVideoById(Long id);
     
     /**
      * 根据用户ID查询视频列表

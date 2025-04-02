@@ -210,12 +210,13 @@ public class UpLoadVideoController {
         User user = (User) request.getAttribute("user");
         
         // 查询视频是否存在且属于当前用户
-        Video video = videoService.getVideoById(id);
+        HashMap<String, Object> video = videoService.getVideoById(id);
         if (video == null) {
             return ResponseResult.error("视频不存在");
         }
-        
-        if (!video.getUserId().equals(user.getId())) {
+        User userInfo = (User) video.get("userInfo");
+        System.out.println("用户id" + userInfo);
+        if (!userInfo.getId().equals(user.getId())) {
             return ResponseResult.error("无权删除此视频");
         }
         
