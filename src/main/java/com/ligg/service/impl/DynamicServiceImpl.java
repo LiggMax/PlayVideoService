@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -252,9 +254,18 @@ public class DynamicServiceImpl implements DynamicService {
     
     @Override
     public Map<String, Object> getDynamicComments(Long dynamicId, int page, int size) {
+        System.out.println("服务层获取动态评论, dynamicId=" + dynamicId + ", page=" + page + ", size=" + size);
+        
         int offset = (page - 1) * size;
         List<DynamicComment> comments = dynamicCommentMapper.selectByDynamicId(dynamicId, offset, size);
         int total = dynamicCommentMapper.countByDynamicId(dynamicId);
+        
+        System.out.println("查询到评论数量: " + (comments != null ? comments.size() : 0) + ", 总评论数: " + total);
+        
+        // 确保comments不为null
+        if (comments == null) {
+            comments = new ArrayList<>();
+        }
         
         // 查询用户信息和回复信息
         for (DynamicComment comment : comments) {
@@ -266,6 +277,11 @@ public class DynamicServiceImpl implements DynamicService {
             
             // 查询回复
             List<DynamicComment> replies = dynamicCommentMapper.selectRepliesByParentId(comment.getId());
+            
+            // 确保replies不为null
+            if (replies == null) {
+                replies = new ArrayList<>();
+            }
             
             // 填充回复的用户信息
             for (DynamicComment reply : replies) {

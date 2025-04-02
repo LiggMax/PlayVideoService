@@ -212,7 +212,11 @@ public class DynamicController {
                                        @RequestParam(value = "page", defaultValue = "1") int page,
                                        @RequestParam(value = "size", defaultValue = "10") int size) {
         
+        System.out.println("获取动态评论, dynamicId=" + dynamicId + ", page=" + page + ", size=" + size);
+        
         Map<String, Object> result = dynamicService.getDynamicComments(dynamicId, page, size);
+        
+        System.out.println("评论数据: " + result);
         
         return ResponseResult.success(result);
     }
