@@ -27,10 +27,23 @@
     <select id="selectAllVideos" resultType="java.util.HashMap">
         <if test="status == null or status == ''">
             (SELECT
-                id, title, description, video_path as videoPath, video_url as videoUrl,
-                cover_path as coverPath, cover_url as coverUrl, duration, category,
-                user_id as userId, uploader_name as uploaderName, views, likes,
-                status, create_time as createTime, update_time as updateTime, tags
+                id, 
+                title COLLATE utf8mb4_general_ci as title, 
+                description COLLATE utf8mb4_general_ci as description, 
+                video_path COLLATE utf8mb4_general_ci as videoPath, 
+                video_url COLLATE utf8mb4_general_ci as videoUrl,
+                cover_path COLLATE utf8mb4_general_ci as coverPath, 
+                cover_url COLLATE utf8mb4_general_ci as coverUrl, 
+                duration, 
+                category COLLATE utf8mb4_general_ci as category,
+                user_id as userId, 
+                uploader_name COLLATE utf8mb4_general_ci as uploaderName, 
+                views, 
+                likes,
+                status, 
+                create_time as createTime, 
+                update_time as updateTime, 
+                tags COLLATE utf8mb4_general_ci as tags
             FROM
                 video
             <where>
@@ -40,10 +53,23 @@
             </where>)
             UNION ALL
             (SELECT
-                id, title, description, video_path as videoPath, video_url as videoUrl,
-                cover_path as coverPath, cover_url as coverUrl, duration, category,
-                user_id as userId, uploader_name as uploaderName, views, likes,
-                status, create_time as createTime, update_time as updateTime, tags
+                id, 
+                title COLLATE utf8mb4_general_ci as title, 
+                description COLLATE utf8mb4_general_ci as description, 
+                video_path COLLATE utf8mb4_general_ci as videoPath, 
+                video_url COLLATE utf8mb4_general_ci as videoUrl,
+                cover_path COLLATE utf8mb4_general_ci as coverPath, 
+                cover_url COLLATE utf8mb4_general_ci as coverUrl, 
+                duration, 
+                category COLLATE utf8mb4_general_ci as category,
+                user_id as userId, 
+                uploader_name COLLATE utf8mb4_general_ci as uploaderName, 
+                views, 
+                likes,
+                status, 
+                create_time as createTime, 
+                update_time as updateTime, 
+                tags COLLATE utf8mb4_general_ci as tags
             FROM
                 draft_video
             <where>
@@ -139,9 +165,45 @@
             u.username, u.avatar_url as avatarUrl, u.nickname
         FROM
             (
-                SELECT * FROM video WHERE id = #{id}
+                SELECT 
+                    id,
+                    title COLLATE utf8mb4_general_ci as title,
+                    description COLLATE utf8mb4_general_ci as description,
+                    video_path COLLATE utf8mb4_general_ci as video_path,
+                    video_url COLLATE utf8mb4_general_ci as video_url,
+                    cover_path COLLATE utf8mb4_general_ci as cover_path,
+                    cover_url COLLATE utf8mb4_general_ci as cover_url,
+                    duration,
+                    category COLLATE utf8mb4_general_ci as category,
+                    user_id,
+                    uploader_name COLLATE utf8mb4_general_ci as uploader_name,
+                    views,
+                    likes,
+                    status,
+                    create_time,
+                    update_time,
+                    tags COLLATE utf8mb4_general_ci as tags
+                FROM video WHERE id = #{id}
                 UNION ALL
-                SELECT * FROM draft_video WHERE id = #{id}
+                SELECT 
+                    id,
+                    title COLLATE utf8mb4_general_ci as title,
+                    description COLLATE utf8mb4_general_ci as description,
+                    video_path COLLATE utf8mb4_general_ci as video_path,
+                    video_url COLLATE utf8mb4_general_ci as video_url,
+                    cover_path COLLATE utf8mb4_general_ci as cover_path,
+                    cover_url COLLATE utf8mb4_general_ci as cover_url,
+                    duration,
+                    category COLLATE utf8mb4_general_ci as category,
+                    user_id,
+                    uploader_name COLLATE utf8mb4_general_ci as uploader_name,
+                    views,
+                    likes,
+                    status,
+                    create_time,
+                    update_time,
+                    tags COLLATE utf8mb4_general_ci as tags
+                FROM draft_video WHERE id = #{id}
             ) v
         LEFT JOIN
             user u ON v.user_id = u.id
