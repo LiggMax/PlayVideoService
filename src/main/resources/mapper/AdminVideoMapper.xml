@@ -144,7 +144,7 @@
                 </when>
                 <otherwise>
                     SELECT COUNT(*) FROM video
-                    <where>
+             +       <where>
                         status = #{status}
                         <if test="keyword != null and keyword != ''">
                             AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
