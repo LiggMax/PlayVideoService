@@ -48,14 +48,23 @@ jwt:
 video:
   # 视频上传路径
   upload:
-    path: D:/Exploitation/JavaWeb/PlayVideo/upload/videos
+    path: C:/Exploitation/JavaWeb/PlayVideo/upload/videos
   # 封面上传路径
   cover:
-    path: D:/Exploitation/JavaWeb/PlayVideo/upload/covers
+    path: C:/Exploitation/JavaWeb/PlayVideo/upload/covers
   # 视频访问URL前缀
   access:
     url: http://localhost:8080/videos
 
 # 动态内容上传路径
 upload:
-  path: D:/Exploitation/JavaWeb/PlayVideo/upload/images
+  path: C:/Exploitation/JavaWeb/PlayVideo/upload/images
+
+admin:
+  jwt:
+    # JWT密钥（生产环境请更换为复杂的随机字符串）
+    secret: LIGG_PlayVideo_Admin_JWT_Secret_Key_2023
+    # 过期时间，单位秒，默认2小时
+    expiration: 7200
+    # 签发者
+    issuer: play-video-admin
