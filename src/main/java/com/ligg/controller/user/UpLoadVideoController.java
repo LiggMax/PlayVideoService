@@ -163,10 +163,11 @@ public class UpLoadVideoController {
         // 设置初始数据
         video.setViews(0);
         video.setLikes(0);
-        video.setStatus(1); // 1表示正常状态
+        // 状态设置为2表示审核中
+        video.setStatus(2);
         
-        // 保存视频信息
-        Video savedVideo = videoService.saveVideo(video);
+        // 保存到草稿视频表（待审核）
+        Video savedVideo = videoService.saveToDraftVideo(video);
         
         return ResponseResult.success(savedVideo);
     }
@@ -186,10 +187,10 @@ public class UpLoadVideoController {
         // 从请求属性中获取用户信息（由JWT拦截器设置）
         User user = (User) request.getAttribute("user");
         
-        // 查询视频列表
-        List<Video> videos = videoService.getVideosByUserId(user.getId(), page, size);
+        // 查询视频列表（包括已发布和审核中的视频）
+        List<Video> videos = videoService.getAllVideosByUserId(user.getId(), page, size);
         // 查询总数
-        int total = videoService.countVideosByUserId(user.getId());
+        int total = videoService.countAllVideosByUserId(user.getId());
         
         Map<String, Object> result = new HashMap<>();
         result.put("videos", videos);

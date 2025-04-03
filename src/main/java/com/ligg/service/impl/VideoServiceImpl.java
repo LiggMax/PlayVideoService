@@ -2,6 +2,7 @@ package com.ligg.service.impl;
 
 import com.ligg.entity.User;
 import com.ligg.entity.Video;
+import com.ligg.mapper.DraftVideoMapper;
 import com.ligg.mapper.UserMapper;
 import com.ligg.mapper.VideoMapper;
 import com.ligg.service.VideoService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +23,10 @@ public class VideoServiceImpl implements VideoService {
     
     @Autowired
     private VideoMapper videoMapper;
+    
+    @Autowired
+    private DraftVideoMapper draftVideoMapper;
+    
     @Autowired
     private UserMapper userMapper;
 
@@ -45,6 +51,26 @@ public class VideoServiceImpl implements VideoService {
     }
     
     @Override
+    @Transactional
+    public Video saveToDraftVideo(Video video) {
+        // 如果是新视频，设置创建时间
+        if (video.getId() == null) {
+            video.setCreateTime(LocalDateTime.now());
+            // 更新时间
+            video.setUpdateTime(LocalDateTime.now());
+            // 执行插入到草稿表
+            draftVideoMapper.insert(video);
+        } else {
+            // 更新时间
+            video.setUpdateTime(LocalDateTime.now());
+            // 执行更新草稿表
+            draftVideoMapper.update(video);
+        }
+        
+        return video;
+    }
+    
+    @Override
     public HashMap<String, Object> getVideoById(Long id) {
         HashMap<String, Object> videoInfoMap = new HashMap<>();
         Video video = videoMapper.selectById(id);
@@ -61,8 +87,46 @@ public class VideoServiceImpl implements VideoService {
     }
     
     @Override
+    public List<Video> getAllVideosByUserId(Long userId, int offset, int limit) {
+        // 获取正式视频
+        List<Video> videos = videoMapper.selectByUserId(userId, offset, limit);
+        
+        // 获取草稿视频（审核中的视频）
+        List<Video> draftVideos = draftVideoMapper.selectByUserId(userId, 0, Integer.MAX_VALUE);
+        
+        // 合并两个列表
+        List<Video> allVideos = new ArrayList<>();
+        allVideos.addAll(videos);
+        allVideos.addAll(draftVideos);
+        
+        // 按创建时间降序排序
+        allVideos.sort((v1, v2) -> v2.getCreateTime().compareTo(v1.getCreateTime()));
+        
+        // 根据分页参数截取
+        int fromIndex = Math.min(offset, allVideos.size());
+        int toIndex = Math.min(offset + limit, allVideos.size());
+        
+        if (fromIndex < toIndex) {
+            return allVideos.subList(fromIndex, toIndex);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+    
+    @Override
     public int countVideosByUserId(Long userId) {
         return videoMapper.countByUserId(userId);
+    }
+    
+    @Override
+    public int countAllVideosByUserId(Long userId) {
+        // 正式视频数量
+        int videoCount = videoMapper.countByUserId(userId);
+        
+        // 草稿视频数量
+        int draftCount = draftVideoMapper.countByUserId(userId);
+        
+        return videoCount + draftCount;
     }
     
     @Override

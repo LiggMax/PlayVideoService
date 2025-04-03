@@ -18,6 +18,13 @@ public interface VideoService {
     Video saveVideo(Video video);
     
     /**
+     * 将视频信息保存到草稿视频表（待审核）
+     * @param video 视频对象
+     * @return 保存后的视频对象
+     */
+    Video saveToDraftVideo(Video video);
+    
+    /**
      * 根据ID查询视频
      *
      * @param id 视频ID
@@ -35,11 +42,27 @@ public interface VideoService {
     List<Video> getVideosByUserId(Long userId, int offset, int limit);
     
     /**
+     * 根据用户ID查询所有视频列表（包括已发布和审核中的视频）
+     * @param userId 用户ID
+     * @param offset 偏移量
+     * @param limit 限制数量
+     * @return 视频列表
+     */
+    List<Video> getAllVideosByUserId(Long userId, int offset, int limit);
+    
+    /**
      * 统计用户上传的视频数量
      * @param userId 用户ID
      * @return 视频数量
      */
     int countVideosByUserId(Long userId);
+    
+    /**
+     * 统计用户上传的所有视频数量（包括已发布和审核中的视频）
+     * @param userId 用户ID
+     * @return 视频数量
+     */
+    int countAllVideosByUserId(Long userId);
     
     /**
      * 删除视频

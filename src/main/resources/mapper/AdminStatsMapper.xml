@@ -62,12 +62,13 @@
     
     <!-- 获取最活跃的TOP 10用户 -->
     <select id="getTopActiveUsers" resultType="java.util.HashMap">
+        <!-- 修复MySQL only_full_group_by模式下的问题 -->
         SELECT 
             user_id as userId, 
             uploader_name as uploaderName, 
             COUNT(*) as videoCount 
         FROM video 
-        GROUP BY user_id 
+        GROUP BY user_id, uploader_name 
         ORDER BY videoCount DESC 
         LIMIT 10
     </select>
