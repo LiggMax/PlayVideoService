@@ -44,11 +44,9 @@ public interface VideoService {
     /**
      * 根据用户ID查询所有视频列表（包括已发布和审核中的视频）
      * @param userId 用户ID
-     * @param offset 偏移量
-     * @param limit 限制数量
      * @return 视频列表
      */
-    List<Video> getAllVideosByUserId(Long userId, int offset, int limit);
+    List<Video> getAllVideosByUserId(Long userId);
     
     /**
      * 统计用户上传的视频数量

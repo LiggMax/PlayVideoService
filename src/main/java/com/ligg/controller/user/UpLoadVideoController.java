@@ -174,21 +174,17 @@ public class UpLoadVideoController {
     
     /**
      * 获取当前用户的视频列表
-     * @param page 页码
-     * @param size 每页数量
      * @param request HTTP请求
      * @return 视频列表
      */
     @GetMapping("/list")
     public ResponseResult<Map<String, Object>> listMyVideos(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request) {
         // 从请求属性中获取用户信息（由JWT拦截器设置）
         User user = (User) request.getAttribute("user");
         
-        // 查询视频列表（包括已发布和审核中的视频）
-        List<Video> videos = videoService.getAllVideosByUserId(user.getId(), page, size);
+        // 查询视频列表
+        List<Video> videos = videoService.getAllVideosByUserId(user.getId());
         // 查询总数
         int total = videoService.countAllVideosByUserId(user.getId());
         

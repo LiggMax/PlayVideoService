@@ -52,11 +52,9 @@
     
     <!-- 根据用户ID查询视频列表 -->
     <select id="selectByUserId" resultType="com.ligg.entity.Video">
-        SELECT <include refid="Base_Column_List" />
+        SELECT *
         FROM video
         WHERE user_id = #{userId}
-        ORDER BY create_time DESC
-        LIMIT #{offset}, #{limit}
     </select>
     
     <!-- 根据用户ID统计视频数量 -->
@@ -143,5 +141,12 @@
         FROM video
         WHERE (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
         AND status = #{status}
+    </select>
+
+    <!-- 搜索视频 -->
+    <select id="searchVideo" resultType="com.ligg.entity.Video">
+        select *
+        from video
+        where title like concat('%', #{keyword}, '%') or description like concat('%', #{keyword}, '%')
     </select>
 </mapper> 

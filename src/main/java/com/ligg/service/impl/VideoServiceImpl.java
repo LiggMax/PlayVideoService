@@ -83,34 +83,13 @@ public class VideoServiceImpl implements VideoService {
     
     @Override
     public List<Video> getVideosByUserId(Long userId, int offset, int limit) {
-        return videoMapper.selectByUserId(userId, offset, limit);
+        return videoMapper.selectByUserId(userId);
     }
     
     @Override
-    public List<Video> getAllVideosByUserId(Long userId, int offset, int limit) {
+    public List<Video> getAllVideosByUserId(Long userId) {
         // 获取正式视频
-        List<Video> videos = videoMapper.selectByUserId(userId, offset, limit);
-        
-        // 获取草稿视频（审核中的视频）
-        List<Video> draftVideos = draftVideoMapper.selectByUserId(userId, 0, Integer.MAX_VALUE);
-        
-        // 合并两个列表
-        List<Video> allVideos = new ArrayList<>();
-        allVideos.addAll(videos);
-        allVideos.addAll(draftVideos);
-        
-        // 按创建时间降序排序
-        allVideos.sort((v1, v2) -> v2.getCreateTime().compareTo(v1.getCreateTime()));
-        
-        // 根据分页参数截取
-        int fromIndex = Math.min(offset, allVideos.size());
-        int toIndex = Math.min(offset + limit, allVideos.size());
-        
-        if (fromIndex < toIndex) {
-            return allVideos.subList(fromIndex, toIndex);
-        } else {
-            return new ArrayList<>();
-        }
+        return videoMapper.selectByUserId(userId);
     }
     
     @Override
@@ -122,11 +101,9 @@ public class VideoServiceImpl implements VideoService {
     public int countAllVideosByUserId(Long userId) {
         // 正式视频数量
         int videoCount = videoMapper.countByUserId(userId);
+
         
-        // 草稿视频数量
-        int draftCount = draftVideoMapper.countByUserId(userId);
-        
-        return videoCount + draftCount;
+        return videoCount ;
     }
     
     @Override

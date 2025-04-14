@@ -40,7 +40,7 @@ public interface VideoMapper {
      * @param limit 查询行数
      * @return 视频列表
      */
-    List<Video> selectByUserId(@Param("userId") Long userId, @Param("offset") int offset, @Param("limit") int limit);
+    List<Video> selectByUserId(@Param("userId") Long userId);
     
     /**
      * 根据用户ID统计视频数量
@@ -132,4 +132,9 @@ public interface VideoMapper {
      * @return 视频数量
      */
     int countSearchResult(@Param("keyword") String keyword, @Param("status") Integer status);
+
+    /**
+     * 视频搜索
+     */
+    Video searchVideo(String keyword);
 } 
