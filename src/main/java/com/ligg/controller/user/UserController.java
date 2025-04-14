@@ -4,7 +4,11 @@ import com.ligg.entity.User;
 import com.ligg.entity.UserSubscription;
 import com.ligg.service.UserService;
 import com.ligg.service.UserSubscriptionService;
+import com.ligg.util.JwtTokenUtil;
 import com.ligg.util.ResponseResult;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -82,16 +86,36 @@ public class UserController {
      * 更新用户信息
      * @param id 用户ID
      * @param user 用户信息
+     * @param request HTTP请求对象
      * @return 更新结果
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> updateUser(
+            @PathVariable Long id, 
+            @RequestBody User user, 
+            HttpServletRequest request) {
         log.info("更新用户信息: {}", id);
         
-        user.setId(id);
-        boolean success = userService.updateUser(user);
-        
+        // 从请求属性中获取当前登录用户
+        User currentUser = (User) request.getAttribute("user");
         Map<String, Object> result = new HashMap<>();
+        
+        // 验证当前用户是否有权限修改此用户信息（只能修改自己的信息）
+        if (currentUser == null || !currentUser.getId().equals(id)) {
+            result.put("success", false);
+            result.put("message", "无权限修改他人信息");
+            return ResponseEntity.status(403).body(result);
+        }
+        
+        // 只允许修改部分字段，防止恶意修改
+        User updateUser = new User();
+        updateUser.setId(id);
+        updateUser.setNickname(user.getNickname());
+        updateUser.setAvatarUrl(user.getAvatarUrl());
+        // 可以根据需要添加其他允许修改的字段
+        
+        boolean success = userService.updateUser(updateUser);
+        
         if (success) {
             result.put("success", true);
             result.put("message", "更新成功");
@@ -312,4 +336,17 @@ public class UserController {
         int count = userSubscriptionService.countSubscribers(userId);
         return ResponseResult.success(count);
     }
-} 
+
+    /**
+     * 更新用户信息
+     */
+//    @PutMapping("/updateUserInfo")
+//    public ResponseResult<?> updateUserInfo(HttpServletRequest request){
+//        String authorization = request.getHeader("authorization");
+//        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
+//        Claims allClaimsFromToken = jwtTokenUtil.getAllClaimsFromToken(authorization);
+//        Long userId = (Long) allClaimsFromToken.get("id");
+//
+//        userService.updateUser()
+//    }
+}

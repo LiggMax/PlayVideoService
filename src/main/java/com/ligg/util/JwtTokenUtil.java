@@ -76,7 +76,7 @@ public class JwtTokenUtil {
      * @param token 令牌
      * @return 所有声明
      */
-    private Claims getAllClaimsFromToken(String token) {
+    public Claims getAllClaimsFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()

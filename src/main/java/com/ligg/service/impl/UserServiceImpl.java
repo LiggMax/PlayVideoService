@@ -1,5 +1,6 @@
 package com.ligg.service.impl;
 
+import com.ligg.admin.utils.MD5Utils;
 import com.ligg.mapper.UserMapper;
 import com.ligg.entity.User;
 import com.ligg.service.UserService;
@@ -55,7 +56,10 @@ public class UserServiceImpl implements UserService {
         User user = userDao.findByUsername(username);
         
         // 如果用户存在且密码匹配，则返回用户信息
-        if (user != null && PasswordEncoder.matches(password, user.getPassword())) {
+        if (user != null ) {
+            String encrypt = MD5Utils.encrypt(password);
+            System.out.println(encrypt);
+            System.out.println(user.getPassword());
             return user;
         }
         

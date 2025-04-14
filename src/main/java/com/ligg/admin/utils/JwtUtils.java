@@ -5,12 +5,15 @@ import com.ligg.admin.entity.AdminUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.nio.charset.StandardCharsets;
 
 /**
  * JWT工具类
@@ -20,6 +23,26 @@ public class JwtUtils {
 
     @Autowired
     private JwtConfig jwtConfig;
+    
+    // 用于缓存生成的密钥
+    private SecretKey cachedKey;
+
+    /**
+     * 获取安全强度足够的密钥
+     * @return SecretKey
+     */
+    private SecretKey getSigningKey() {
+        if (cachedKey == null) {
+            // 两种方式：
+            // 1. 基于配置的密钥生成足够长度的密钥
+            byte[] keyBytes = jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8);
+            cachedKey = Keys.hmacShaKeyFor(keyBytes);
+            
+            // 2. 或使用推荐方式，直接生成适合HS512的随机密钥
+            // cachedKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        }
+        return cachedKey;
+    }
 
     /**
      * 生成管理员token
@@ -36,7 +59,7 @@ public class JwtUtils {
                 .setIssuer(jwtConfig.getIssuer())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpiration() * 1000))
-                .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret())
+                .signWith(getSigningKey())
                 .compact();
     }
 
@@ -47,8 +70,9 @@ public class JwtUtils {
      */
     public Claims parseToken(String token) {
         try {
-            return Jwts.parser()
-                    .setSigningKey(jwtConfig.getSecret())
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {

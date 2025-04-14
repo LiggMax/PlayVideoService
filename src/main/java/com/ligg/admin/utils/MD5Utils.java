@@ -46,4 +46,8 @@ public class MD5Utils {
     public static boolean verify(String raw, String encrypted) {
         return encrypt(raw).equals(encrypted);
     }
+
+    public static void main(String[] args) {
+        System.out.printf(MD5Utils.encrypt("123"));
+    }
 } 
