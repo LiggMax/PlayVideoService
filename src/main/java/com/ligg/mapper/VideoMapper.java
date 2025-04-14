@@ -133,8 +133,4 @@ public interface VideoMapper {
      */
     int countSearchResult(@Param("keyword") String keyword, @Param("status") Integer status);
 
-    /**
-     * 视频搜索
-     */
-    Video searchVideo(String keyword);
-} 
+}

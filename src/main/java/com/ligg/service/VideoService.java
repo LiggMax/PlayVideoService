@@ -136,4 +136,5 @@ public interface VideoService {
      * @return 视频数量
      */
     int countSearchResults(String keyword);
-} 
+
+}
