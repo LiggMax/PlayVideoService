@@ -1,8 +1,11 @@
 package com.ligg.mapper;
 
+import com.ligg.admin.entity.Barrage;
 import com.ligg.entity.Video;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -131,4 +134,16 @@ public interface VideoMapper {
      */
     int countSearchResult(@Param("keyword") String keyword, @Param("status") Integer status);
 
+    /**
+     * 插入弹幕记录
+     */
+    @Insert("insert into barrage(content,time,video_id)" +
+            "values (#{content},#{time},#{videoId})")
+    void insertBaeeage(Barrage barrage);
+
+    /**
+     * 获取弹幕数据
+     */
+    @Select("select * from barrage where video_id=#{videoId}")
+    List<Barrage> selectBarrageByVideoId(Long videoId);
 }

@@ -1,6 +1,8 @@
 package com.ligg.admin.controller;
 
+import com.ligg.admin.entity.Barrage;
 import com.ligg.admin.service.AdminVideoService;
+import com.ligg.mapper.VideoMapper;
 import com.ligg.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ public class AdminVideoController {
 
     @Autowired
     private AdminVideoService adminVideoService;
+
 
     /**
      * 获取待审核视频列表
@@ -102,4 +105,6 @@ public class AdminVideoController {
             return ResponseResult.error("删除失败");
         }
     }
+
+
 } 

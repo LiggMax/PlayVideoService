@@ -1,6 +1,8 @@
 package com.ligg.controller;
 
+import com.ligg.admin.entity.Barrage;
 import com.ligg.entity.Video;
+import com.ligg.mapper.VideoMapper;
 import com.ligg.service.VideoService;
 import com.ligg.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ public class VideoController {
     
     @Autowired
     private VideoService videoService;
+    @Autowired
+    private VideoMapper videoMapper;
     
     /**
      * 获取最新视频列表
@@ -155,5 +159,23 @@ public class VideoController {
             return ResponseResult.success("点赞成功");
         }
         return ResponseResult.error("点赞失败");
+    }
+
+    /**
+     * 保存弹幕
+     */
+    @PostMapping("/saveDanmu")
+    public ResponseResult<String> saveDanmu(@RequestBody Barrage barrage) {
+        videoMapper.insertBaeeage(barrage);
+        return ResponseResult.success();
+    }
+
+    /**
+     * 获取弹幕数据
+     */
+    @GetMapping("/getDanmu/{videoId}")
+    public ResponseResult<List<Barrage>> getDanmu(@PathVariable Long videoId) {
+        List<Barrage> barrageList = videoMapper.selectBarrageByVideoId(videoId);
+        return ResponseResult.success(barrageList);
     }
 }
