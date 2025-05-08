@@ -36,8 +36,6 @@ public interface VideoMapper {
     /**
      * 根据用户ID查询视频列表
      * @param userId 用户ID
-     * @param offset 起始行
-     * @param limit 查询行数
      * @return 视频列表
      */
     List<Video> selectByUserId(@Param("userId") Long userId);

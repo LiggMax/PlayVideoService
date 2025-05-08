@@ -83,7 +83,7 @@ public class AdminVideoServiceImpl implements AdminVideoService {
         if (status == 1 && rows > 0) {
             adminVideoMapper.moveDraftToVideo(id);
             // 审核通过后，可以选择性地删除草稿视频
-            // adminVideoMapper.deleteDraftVideo(id);
+             adminVideoMapper.deleteDraftVideo(id);
         }
         
         return rows > 0;
