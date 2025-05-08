@@ -1,8 +1,12 @@
 package com.ligg.admin.mapper;
 
 import com.ligg.admin.entity.AdminUser;
+import com.ligg.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * 管理员Mapper接口
@@ -23,4 +27,12 @@ public interface AdminUserMapper {
      * @return 影响行数
      */
     int updateLoginInfo(@Param("id") Long id, @Param("ip") String ip);
-} 
+
+    @Select("select * from user")
+    List<User> selectUserInfoList();
+
+
+    void editUser(User user);
+
+    void deleteUser(Long id);
+}

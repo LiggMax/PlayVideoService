@@ -9,9 +9,12 @@ import com.ligg.admin.mapper.AdminUserMapper;
 import com.ligg.admin.service.AdminUserService;
 import com.ligg.admin.utils.JwtUtils;
 import com.ligg.admin.utils.MD5Utils;
+import com.ligg.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 管理员服务实现类
@@ -71,4 +74,19 @@ public class AdminUserServiceImpl implements AdminUserService {
         
         return adminInfoDTO;
     }
-} 
+
+    @Override
+    public List<User> getUserList() {
+        return adminUserMapper.selectUserInfoList();
+    }
+
+    @Override
+    public void editUser(User user) {
+        adminUserMapper.editUser(user);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        adminUserMapper.deleteUser(id);
+    }
+}
